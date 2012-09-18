@@ -25,7 +25,7 @@ extern "C" {
 // #include <lualib.h>
 
 }
-css::SegmenterManager mgr;
+css::SegmenterManager mgr;// = NULL;
 
 /*
 typedef struct __userdata{
@@ -128,8 +128,16 @@ static void Register_lua(lua_State* state)
 }
 */
 
+
+//static const char *dictpath;
+
 static int initdict (lua_State *L) {
-  const char *dictpath = luaL_checkstring(L, 1);
+  // dictpath = luaL_checkstring(L, 1);
+  static const char *dictpath = luaL_checkstring(L, 1);
+  // mgr = new css::SegmenterManager();
+  // if(mgr == NULL){
+  //   mgr = new css::SegmenterManager();
+  // }
   int ret = mgr.init(dictpath);
   if (ret == 0){
 	//成功
@@ -141,6 +149,18 @@ static int initdict (lua_State *L) {
 }
 
 static int segment (lua_State *L) {
+  // if(mgr == NULL){
+  //   mgr = new css::SegmenterManager();
+  // }
+  // css::SegmenterManager* mgr = new css::SegmenterManager();
+  // int ret = mgr->init(dictpath);
+  // if (ret == 0){
+  //       //成功
+  // }
+  // else {
+  //       //失败
+  // }
+
   unsigned int n = 1;
   Segmenter *seg = mgr.getSegmenter(); 
   const char *txt = luaL_checkstring(L, 1);
@@ -161,6 +181,10 @@ static int segment (lua_State *L) {
 
 	seg->popToken(len);
   }
+  mgr.clear();
+  // delete mgr;
+  // delete seg;
+  // mgr = NULL;
   return 1;
 }
   
